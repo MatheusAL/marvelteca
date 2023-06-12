@@ -1,12 +1,16 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import CharacterCard from "@/components/CharacterCard";
 
+interface Thumbnail {
+  path: string;
+  extension: string;
+}
 interface Character {
   id: number;
   name: string;
   description: string;
   modified: string;
-  thumbnail: object;
+  thumbnail: Thumbnail;
   resourceURI: string;
   comics?: object;
   series?: object;
@@ -19,10 +23,11 @@ interface CharactersProps {
 export default function Characters({ charactersData }: CharactersProps) {
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 bg-gradient-to-b from-red-500 to-red-900`}
+      className={`flex min-h-screen flex-col items-center justify-between p-24`}
     >
-      <h1 className="text-[28px]">Marvel characters</h1>
-      <div className="grid grid-cols-4">
+      <h1 className="text-[42px] text-white font-bold">Marvel characters</h1>
+      <input />
+      <div className="grid grid-cols-5 gap-4 pt-3">
         {charactersData && (
           <>
             {charactersData.map((result) => (
