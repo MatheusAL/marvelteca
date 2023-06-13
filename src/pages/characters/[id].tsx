@@ -6,6 +6,35 @@ interface Thumbnail {
   extension: string;
 }
 
+interface Comic {
+  resourceURI: string;
+  name: string;
+}
+interface Comics {
+  available: number;
+  collectionURI: number;
+  items: Array<Comic>;
+}
+interface Serie {
+  resourceURI: string;
+  name: string;
+}
+interface Series {
+  available: number;
+  collectionURI: number;
+  items: Array<Serie>;
+}
+
+interface Storie {
+  resourceURI: string;
+  name: string;
+}
+interface Stories {
+  available: number;
+  collectionURI: number;
+  items: Array<Storie>;
+}
+
 interface Character {
   id: number;
   name: string;
@@ -13,9 +42,9 @@ interface Character {
   modified: string;
   thumbnail: Thumbnail;
   resourceURI: string;
-  comics?: object;
-  series?: object;
-  stories?: object;
+  comics?: Comics;
+  series?: Series;
+  stories?: Stories;
   events?: object;
 }
 interface CharacterProps {
@@ -46,24 +75,30 @@ export default function CharacterPage({ characterData }: CharacterProps) {
           <div className="info pt-8">
             <p className="text-bold text-[28px]">Aparece em:</p>
             <div className="numbers flex justify-around">
-              <div className="flex flex-col hover:text-red-700">
-                <b className="flex justify-center">
-                  {characterData.comics.available}
-                </b>
-                <b>HQs</b>
-              </div>
-              <div className="flex flex-col hover:text-red-700">
-                <b className="flex justify-center">
-                  {characterData.series.available}
-                </b>
-                <b>Séries</b>
-              </div>
-              <div className="flex flex-col hover:text-red-700">
-                <b className="flex justify-center">
-                  {characterData.stories.available}
-                </b>
-                <b>Histórias</b>
-              </div>
+              {characterData.comics && (
+                <div className="flex flex-col hover:text-red-700">
+                  <b className="flex justify-center">
+                    {characterData.comics.available}
+                  </b>
+                  <b>HQs</b>
+                </div>
+              )}
+              {characterData.series && (
+                <div className="flex flex-col hover:text-red-700">
+                  <b className="flex justify-center">
+                    {characterData.series.available}
+                  </b>
+                  <b>Séries</b>
+                </div>
+              )}
+              {characterData.stories && (
+                <div className="flex flex-col hover:text-red-700">
+                  <b className="flex justify-center">
+                    {characterData.stories.available}
+                  </b>
+                  <b>Histórias</b>
+                </div>
+              )}
             </div>
           </div>
         </section>
