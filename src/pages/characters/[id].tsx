@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { GetServerSidePropsContext } from "next";
 import Layout from "@/components/Layout";
 import marvelService from "@/services/marvelAPI";
 interface Thumbnail {
@@ -107,11 +108,12 @@ export default function CharacterPage({ characterData }: CharacterProps) {
   );
 }
 
-export const getServerSideProps = async ({ query }) => {
-  const characterId = query.id;
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const characterId = context?.params?.id;
   const res = await marvelService.get("/characters", `?id=${characterId}&`);
   const data = await res;
-  console.log(data.data.results[0]);
   return {
     props: {
       characterData: data.data.results[0],

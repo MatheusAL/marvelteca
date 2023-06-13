@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { ReactSVG } from "react-svg";
+import Image from "next/image";
 import CharacterCard from "@/components/CharacterCard";
 import SearchBar from "@/components/SearchBar";
 import Layout from "@/components/Layout";
@@ -33,7 +35,7 @@ export default function Characters({
   const [charactersDataList, setCharacterData] =
     useState<Array<Character>>(charactersData);
   const [loading, setLoading] = useState(false);
-
+  const shieldPath = "../../assets/shield.svg";
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -46,9 +48,7 @@ export default function Characters({
       setCharacterData(data.data.results);
       setLoading(false);
     };
-    //if (!loading) {
     fetchData();
-    //}
   }, [currentPage]);
 
   return (
@@ -59,7 +59,13 @@ export default function Characters({
         <h1 className="text-[42px] text-white font-bold">Marvel Characters</h1>
         <SearchBar />
         {loading ? (
-          <h1>loading</h1>
+          <Image
+            alt="loading"
+            width="200"
+            height="200"
+            src={shieldPath}
+            className="animate-spin"
+          />
         ) : (
           <div className="grid lg:grid-cols-6 gap-6 pt-3 sm:grid-cols-4">
             {!loading && (
