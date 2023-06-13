@@ -1,6 +1,7 @@
-import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-center p-24 text-white text-weight-bold`}
@@ -11,7 +12,10 @@ export default function Home() {
         história se ele ou ela não se sentir realmente no personagem no momento
         em que escreve. Stan Lee&quot;
       </span>
-      <button className="border border-white bg-black rounded shadow py-2 px-4">
+      <button
+        onClick={() => router.push("/characters")}
+        className="border border-white bg-black rounded shadow py-2 px-4"
+      >
         Entre nessa aventura!
       </button>
     </main>

@@ -27,7 +27,7 @@ export default function CharacterCard({ characterData }: CharacterProps) {
     <Link href={`/characters/${characterData.id}`}>
       <section
         key={characterData.id}
-        className="flex flex-col rounded-lg h-full w-100 "
+        className="flex flex-col rounded-lg h-full w-100 hover:scale-110 transition duration-150 ease-out"
       >
         <div className="max-h-56 overflow-hidden">
           <Image

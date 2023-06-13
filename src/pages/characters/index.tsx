@@ -1,6 +1,9 @@
-import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
+import { useEffect, useState } from "react";
 import CharacterCard from "@/components/CharacterCard";
 import SearchBar from "@/components/SearchBar";
+import Layout from "@/components/Layout";
+import Pagination from "@/components/Pagination";
+import marvelService from "@/services/marvelAPI";
 
 interface Thumbnail {
   path: string;
@@ -20,43 +23,73 @@ interface Character {
 }
 interface CharactersProps {
   charactersData: Array<Character>;
+  requestData: any;
 }
-export default function Characters({ charactersData }: CharactersProps) {
+export default function Characters({
+  charactersData,
+  requestData,
+}: CharactersProps) {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [charactersDataList, setCharacterData] =
+    useState<Array<Character>>(charactersData);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const offset = (currentPage - 1) * 50;
+      const res = await marvelService.get(
+        "/characters",
+        `?orderBy=name&offset=${offset}&limit=50&`
+      );
+      const data = await res;
+      setCharacterData(data.data.results);
+      setLoading(false);
+    };
+    //if (!loading) {
+    fetchData();
+    //}
+  }, [currentPage]);
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24`}
-    >
-      <h1 className="text-[42px] text-white font-bold">
-        Marvel Characters texto bolado
-      </h1>
-      <SearchBar />
-      <div className="grid lg:grid-cols-6 gap-6 pt-3 sm:grid-cols-4">
-        {charactersData && (
-          <>
-            {charactersData.map((result) => (
-              <CharacterCard key={result.id} characterData={result} />
-            ))}
-          </>
+    <Layout>
+      <main
+        className={`flex min-h-screen flex-col items-center justify-between p-24`}
+      >
+        <h1 className="text-[42px] text-white font-bold">Marvel Characters</h1>
+        <SearchBar />
+        {loading ? (
+          <h1>loading</h1>
+        ) : (
+          <div className="grid lg:grid-cols-6 gap-6 pt-3 sm:grid-cols-4">
+            {!loading && (
+              <>
+                {charactersDataList.map((result) => (
+                  <CharacterCard key={result.id} characterData={result} />
+                ))}
+              </>
+            )}
+          </div>
         )}
-      </div>
-    </main>
+        <Pagination
+          totalCharacters={requestData.total}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
+      </main>
+    </Layout>
   );
 }
 export const getServerSideProps = async () => {
-  const PUBLIC_KEY = process.env.PUBLIC_KEY;
-  const PRIVATE_KEY = process.env.PRIVATE_KEY;
-  var md5 = require("md5");
-  const api =
-    "http://gateway.marvel.com/v1/public/characters?orderBy=name&limit=50&ts=";
-  const timestamp = new Date().toISOString();
-  const hash = md5(timestamp + PRIVATE_KEY + PUBLIC_KEY);
-  const apiUrl = api + timestamp + "&apikey=" + PUBLIC_KEY + "&hash=" + hash;
-
-  const res = await fetch(apiUrl);
-  const data = await res.json();
+  const res = await marvelService.get(
+    "/characters",
+    "?orderBy=name&offset=0&limit=50&"
+  );
+  const data = await res;
   return {
     props: {
       charactersData: data.data.results,
+      requestData: data.data,
     },
   };
 };
