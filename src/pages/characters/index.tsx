@@ -1,5 +1,6 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import CharacterCard from "@/components/CharacterCard";
+import SearchBar from "@/components/SearchBar";
 
 interface Thumbnail {
   path: string;
@@ -25,9 +26,11 @@ export default function Characters({ charactersData }: CharactersProps) {
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24`}
     >
-      <h1 className="text-[42px] text-white font-bold">Marvel characters</h1>
-      <input />
-      <div className="grid grid-cols-5 gap-4 pt-3">
+      <h1 className="text-[42px] text-white font-bold">
+        Marvel Characters texto bolado
+      </h1>
+      <SearchBar />
+      <div className="grid lg:grid-cols-6 gap-6 pt-3 sm:grid-cols-4">
         {charactersData && (
           <>
             {charactersData.map((result) => (

@@ -33,3 +33,6 @@ body {
 
   filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#ff0101", endColorstr="#890e00", GradientType=1 );
 }
+img {
+  height: 100%; /* Set your desired height value */
+}
