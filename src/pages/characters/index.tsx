@@ -25,17 +25,23 @@ interface Character {
 }
 interface CharactersProps {
   charactersData: Array<Character>;
-  requestData: any;
+  totalCharactersReceived: number;
 }
 export default function Characters({
   charactersData,
-  requestData,
+  totalCharactersReceived,
 }: CharactersProps) {
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [displayLimit, setDisplayLimit] = useState<number>(50);
+  const [totalCharacters, setTotalCharacters] = useState<number>(
+    totalCharactersReceived
+  );
   const [charactersDataList, setCharacterData] =
     useState<Array<Character>>(charactersData);
   const [loading, setLoading] = useState(false);
-  const shieldPath = "../../assets/shield.svg";
+  const [searchQuery, setSearchQuery] = useState("");
+  const shieldPath = "/shield.svg";
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -45,11 +51,36 @@ export default function Characters({
         `?orderBy=name&offset=${offset}&limit=50&`
       );
       const data = await res;
+      console.log(data);
       setCharacterData(data.data.results);
+      const limit =
+        data.data.limit >= data.data.total ? data.data.total : data.data.limit;
+      setDisplayLimit(limit);
+      setTotalCharacters(data.data.total);
       setLoading(false);
     };
-    fetchData();
+    if (currentPage !== 1) {
+      fetchData();
+    }
   }, [currentPage]);
+
+  useEffect(() => {
+    const searchCharacters = async () => {
+      setLoading(true);
+      const res = await marvelService.get(
+        "/characters",
+        `?nameStartsWith=${searchQuery}&orderBy=name&limit=50&`
+      );
+      const data = await res;
+      console.log(data);
+      setCharacterData(data.data.results);
+      setTotalCharacters(data.data.total);
+      setLoading(false);
+    };
+    if (searchQuery.length >= 3) {
+      searchCharacters();
+    }
+  }, [searchQuery]);
 
   return (
     <Layout>
@@ -57,17 +88,17 @@ export default function Characters({
         className={`flex min-h-screen flex-col items-center justify-between p-24`}
       >
         <h1 className="text-[42px] text-white font-bold">Marvel Characters</h1>
-        <SearchBar />
+        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         {loading ? (
           <Image
             alt="loading"
             width="200"
             height="200"
             src={shieldPath}
-            className="animate-spin"
+            className="animate-spin animate-pulse"
           />
         ) : (
-          <div className="grid lg:grid-cols-6 gap-6 pt-3 sm:grid-cols-4">
+          <div className="grid lg:grid-cols-6 gap-6 pt-3 sm:grid-cols-4 pb-10 min-h-max">
             {!loading && (
               <>
                 {charactersDataList.map((result) => (
@@ -78,9 +109,10 @@ export default function Characters({
           </div>
         )}
         <Pagination
-          totalCharacters={requestData.total}
+          totalCharacters={totalCharacters}
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}
+          displayLimit={displayLimit}
         />
       </main>
     </Layout>
@@ -95,7 +127,7 @@ export const getServerSideProps = async () => {
   return {
     props: {
       charactersData: data.data.results,
-      requestData: data.data,
+      totalCharactersReceived: data.data.total,
     },
   };
 };
