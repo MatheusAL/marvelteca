@@ -1,24 +1,24 @@
 interface SearchBarProps {
   searchQuery: string;
-  limit: number;
+  requestLimit: number;
   setSearchQuery: (search: string) => void;
-  setSearchLimit: (limit: number) => void;
+  setRequestLimit: (limit: number) => void;
 }
 
 export default function SearchBar({
   searchQuery,
-  limit,
+  requestLimit,
   setSearchQuery,
-  setSearchLimit,
+  setRequestLimit,
 }: SearchBarProps) {
   return (
     <div className="flex rounded w-full py-3 drop-shadow-2xl">
       <div className="pr-2">
         <select
           id="limit"
-          value={limit}
+          value={requestLimit}
           onChange={(e) => {
-            setSearchLimit(parseInt(e.target.value));
+            setRequestLimit(parseInt(e.target.value));
           }}
           className="block px-4 py-4 text-red-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
         >

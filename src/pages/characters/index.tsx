@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { Suspense } from "react";
 import Image from "next/image";
 import CharacterCard from "@/components/CharacterCard";
 import SearchBar from "@/components/SearchBar";
@@ -33,6 +34,8 @@ export default function Characters({
   /*  States   */
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [displayLimit, setDisplayLimit] = useState<number>(50);
+  const [requestLimit, setRequestLimit] = useState<number>(50);
+  const [orderField, setOrderField] = useState<string>("name");
   const [totalCharacters, setTotalCharacters] = useState<number>(
     totalCharactersReceived
   );
@@ -45,40 +48,65 @@ export default function Characters({
   const shieldPath: string = "/shield.svg";
   const firstLoad = useRef<boolean>(true);
 
+  /* Functions */
+
   useEffect(() => {
-    console.log("chamou");
+    const getFilters = () => {
+      let searchFilters: string = "?";
+      const offset = (currentPage - 1) * 50;
+      if (searchQuery.length >= 3) {
+        searchFilters += `nameStartsWith=${searchQuery}&`;
+      }
+      searchFilters += `orderBy=${orderField}&offset=${offset}&limit=${requestLimit}&`;
+      return searchFilters;
+    };
+
     const fetchData = async () => {
       setLoading(true);
-      const offset = (currentPage - 1) * 50;
+      // const offset = (currentPage - 1) * 50;
+
+      /* if (searchQuery.length >= 3) {
+        search = `nameStartsWith=${searchQuery}&`;
+      }
+      */
+      const search = getFilters();
       const res = await marvelService.get(
         "/characters",
-        `?orderBy=name&offset=${offset}&limit=${displayLimit}&`
+        search
+        /* `?orderBy=name&offset=${offset}&limit=${requestLimit}&` */
       );
       const data = await res;
-      setCharacterData(data.data.results);
-      const limit =
-        data.data.limit >= data.data.total ? data.data.total : data.data.limit;
-      setDisplayLimit(limit);
-      setTotalCharacters(data.data.total);
+      if (data.code === 200) {
+        setCharacterData(data.data.results);
+        const limit =
+          data.data.limit >= data.data.total
+            ? data.data.total
+            : data.data.limit;
+        setDisplayLimit(limit);
+        setTotalCharacters(data.data.total);
+      }
       setLoading(false);
     };
-    if (!firstLoad.current) {
+    if (
+      (!firstLoad.current && searchQuery.length >= 3) ||
+      searchQuery.length === 0
+    ) {
       fetchData();
     }
     firstLoad.current = false;
-  }, [currentPage, displayLimit]);
+  }, [currentPage, requestLimit, orderField, searchQuery]);
 
-  useEffect(() => {
+  /* useEffect(() => {
+
     const searchCharacters = async () => {
       let search = "";
       setLoading(true);
-
       if (searchQuery.length >= 3) {
         search = `nameStartsWith=${searchQuery}&`;
       }
       const res = await marvelService.get(
         "/characters",
-        `?${search}orderBy=name&limit=${displayLimit}&`
+        `?${search}orderBy=name&limit=${requestLimit}&`
       );
       const data = await res;
       setCharacterData(data.data.results);
@@ -91,7 +119,7 @@ export default function Characters({
     if (searchQuery.length >= 3 || searchQuery.length === 0) {
       searchCharacters();
     }
-  }, [searchQuery]);
+  }, [searchQuery, requestLimit]); */
 
   return (
     <Layout>
@@ -102,9 +130,10 @@ export default function Characters({
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
-          limit={displayLimit}
-          setSearchLimit={setDisplayLimit}
+          requestLimit={requestLimit}
+          setRequestLimit={setRequestLimit}
         />
+
         {loading ? (
           <Image
             alt="loading"

@@ -113,7 +113,7 @@ export default function CharacterPage({ characterData }: CharacterProps) {
               )}
             </div>
           </div>
-          <section className="flex justify-between max-h-72 overflow-scroll pt-4 border border-white rounded-xl py-3">
+          <section className="flex justify-around max-h-72 overflow-scroll pt-4 border border-white rounded-xl py-3">
             <div className="comics">
               {characterData.comics?.items.map((comic) => (
                 <p className="hover:text-red-700" key={comic.name}>

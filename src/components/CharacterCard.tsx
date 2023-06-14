@@ -29,7 +29,7 @@ export default function CharacterCard({ characterData }: CharacterProps) {
         key={characterData.id}
         className="flex flex-col rounded-lg h-full w-100 hover:scale-110 transition duration-150 ease-out"
       >
-        <div className="max-h-56 overflow-hidden">
+        <div className="h-56 overflow-hidden">
           <Image
             className="object-fit w-full border border-white rounded-lg"
             src={thumbnailPath}
