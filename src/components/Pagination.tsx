@@ -15,7 +15,7 @@ export default function Pagination({
   const pagesNumber = Math.ceil(totalCharacters / displayLimit);
 
   const isFinalPage = () => {
-    return currentPage + 1 === pagesNumber;
+    return currentPage + 1 === pagesNumber || pagesNumber === 1;
   };
   const isFirstPage = () => {
     return currentPage === 1;

@@ -1,5 +1,5 @@
 var md5 = require("md5");
-const BASE_URL: string = "http://gateway.marvel.com/v1/public";
+const BASE_URL: string = "https://gateway.marvel.com/v1/public";
 const PUBLIC_KEY = process.env.PUBLIC_KEY;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 

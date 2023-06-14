@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { ReactSVG } from "react-svg";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import CharacterCard from "@/components/CharacterCard";
 import SearchBar from "@/components/SearchBar";
@@ -31,6 +30,7 @@ export default function Characters({
   charactersData,
   totalCharactersReceived,
 }: CharactersProps) {
+  /*  States   */
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [displayLimit, setDisplayLimit] = useState<number>(50);
   const [totalCharacters, setTotalCharacters] = useState<number>(
@@ -40,7 +40,10 @@ export default function Characters({
     useState<Array<Character>>(charactersData);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const shieldPath = "/shield.svg";
+
+  /*  Variables   */
+  const shieldPath: string = "/shield.svg";
+  const firstLoad = useRef<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +54,6 @@ export default function Characters({
         `?orderBy=name&offset=${offset}&limit=50&`
       );
       const data = await res;
-      console.log(data);
       setCharacterData(data.data.results);
       const limit =
         data.data.limit >= data.data.total ? data.data.total : data.data.limit;
@@ -59,25 +61,33 @@ export default function Characters({
       setTotalCharacters(data.data.total);
       setLoading(false);
     };
-    if (currentPage !== 1) {
+    if (!firstLoad.current) {
       fetchData();
     }
+    firstLoad.current = false;
   }, [currentPage]);
 
   useEffect(() => {
     const searchCharacters = async () => {
+      let search = "";
       setLoading(true);
+
+      if (searchQuery.length >= 3) {
+        search = `nameStartsWith=${searchQuery}&`;
+      }
       const res = await marvelService.get(
         "/characters",
-        `?nameStartsWith=${searchQuery}&orderBy=name&limit=50&`
+        `?${search}orderBy=name&limit=50&`
       );
       const data = await res;
-      console.log(data);
       setCharacterData(data.data.results);
+      const limit =
+        data.data.limit >= data.data.total ? data.data.total : data.data.limit;
+      setDisplayLimit(limit);
       setTotalCharacters(data.data.total);
       setLoading(false);
     };
-    if (searchQuery.length >= 3) {
+    if (searchQuery.length >= 3 || searchQuery.length === 0) {
       searchCharacters();
     }
   }, [searchQuery]);

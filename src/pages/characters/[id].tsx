@@ -1,7 +1,10 @@
 import Image from "next/image";
 import { GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import marvelService from "@/services/marvelAPI";
+import NumberView from "@/components/NumberView";
+import Link from "next/link";
 interface Thumbnail {
   path: string;
   extension: string;
@@ -13,7 +16,7 @@ interface Comic {
 }
 interface Comics {
   available: number;
-  collectionURI: number;
+  collectionURI: string;
   items: Array<Comic>;
 }
 interface Serie {
@@ -22,18 +25,18 @@ interface Serie {
 }
 interface Series {
   available: number;
-  collectionURI: number;
+  collectionURI: string;
   items: Array<Serie>;
 }
 
-interface Storie {
+interface Story {
   resourceURI: string;
   name: string;
 }
 interface Stories {
   available: number;
-  collectionURI: number;
-  items: Array<Storie>;
+  collectionURI: string;
+  items: Array<Story>;
 }
 
 interface Character {
@@ -54,6 +57,8 @@ interface CharacterProps {
 export default function CharacterPage({ characterData }: CharacterProps) {
   const thumbnailPath: string =
     characterData.thumbnail.path + "." + characterData.thumbnail.extension;
+  const router = useRouter();
+  const characterId = router.query.id;
   return (
     <Layout>
       <main className={`flex min-h-screen flex-row p-24`}>
@@ -69,36 +74,36 @@ export default function CharacterPage({ characterData }: CharacterProps) {
           <p className="text-bold text-[36px] py-8">Informações do herói</p>
           <p className="text-bold text-[28px]">Nome:</p>
           <span className="pb-3 hover:text-red-700">{characterData.name}</span>
-          <p className="text-bold  text-[28px]">Descrição:</p>
-          <span className="pb-3 hover:text-red-700">
-            {characterData.description}
-          </span>
+          {characterData.description !== "" && (
+            <>
+              <p className="text-bold  text-[28px]">Descrição:</p>
+              <span className="pb-3 hover:text-red-700">
+                {characterData.description}
+              </span>
+            </>
+          )}
           <div className="info pt-8">
             <p className="text-bold text-[28px]">Aparece em:</p>
             <div className="numbers flex justify-around">
               {characterData.comics && (
-                <div className="flex flex-col hover:text-red-700">
-                  <b className="flex justify-center">
-                    {characterData.comics.available}
-                  </b>
-                  <b>HQs</b>
-                </div>
+                <NumberView
+                  number={characterData.comics.available}
+                  label={"HQs"}
+                />
               )}
               {characterData.series && (
-                <div className="flex flex-col hover:text-red-700">
-                  <b className="flex justify-center">
-                    {characterData.series.available}
-                  </b>
-                  <b>Séries</b>
-                </div>
+                <NumberView
+                  number={characterData.series.available}
+                  label={"Séries"}
+                />
               )}
               {characterData.stories && (
-                <div className="flex flex-col hover:text-red-700">
-                  <b className="flex justify-center">
-                    {characterData.stories.available}
-                  </b>
-                  <b>Histórias</b>
-                </div>
+                <Link href={`/characters/comics/${characterId}/`}>
+                  <NumberView
+                    number={characterData.stories.available}
+                    label={"Histórias"}
+                  />
+                </Link>
               )}
             </div>
           </div>
