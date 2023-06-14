@@ -25,7 +25,7 @@ export default function Pagination({
       <span className="text-white dark:text-gray-400">
         Mostrando{" "}
         <span className="font-semibold dark:text-white">
-          {(currentPage - 1) * 50 + 1}
+          {(currentPage - 1) * displayLimit + 1}
         </span>{" "}
         até{" "}
         <span className="font-semibold dark:text-white">

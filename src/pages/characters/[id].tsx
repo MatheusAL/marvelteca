@@ -61,29 +61,35 @@ export default function CharacterPage({ characterData }: CharacterProps) {
   const characterId = router.query.id;
   return (
     <Layout>
-      <main className={`flex min-h-screen flex-row p-24`}>
-        <Image
-          className="object-fit border border-white rounded-lg drop-shadow-2xl"
-          src={thumbnailPath}
-          alt={characterData.name}
-          loading="lazy"
-          width="300"
-          height="300"
-        />
-        <section className="flex flex-col px-8 text-white bg-black rounded-lg mx-8 drop-shadow-2xl w-full">
-          <p className="text-bold text-[36px] py-8">Informações do herói</p>
-          <p className="text-bold text-[28px]">Nome:</p>
+      <main className="flex min-h-screen lg:flex-row flex-col lg:p-24 p-8">
+        <div className="self-center py-3">
+          <Image
+            className="object-fit border border-white rounded-lg drop-shadow-2xl"
+            src={thumbnailPath}
+            alt={characterData.name}
+            loading="lazy"
+            width="300"
+            height="300"
+          />
+        </div>
+        <section className="flex flex-col px-8 py-3 text-white bg-black rounded-lg mx-8 drop-shadow-2xl max-h-min">
+          <p className="text-bold md:text-[36px] text-[24px] py-3">
+            Informações do herói:{" "}
+          </p>
+          <p className="text-bold md:text-[28px] text-[15px]">Nome:</p>
           <span className="pb-3 hover:text-red-700">{characterData.name}</span>
           {characterData.description !== "" && (
             <>
-              <p className="text-bold  text-[28px]">Descrição:</p>
+              <p className="text-bold  md:text-[28px] text-[15px]">
+                Descrição:
+              </p>
               <span className="pb-3 hover:text-red-700">
                 {characterData.description}
               </span>
             </>
           )}
           <div className="info pt-8">
-            <p className="text-bold text-[28px]">Aparece em:</p>
+            <p className="text-bold md:text-[28px] text-[15px]">Aparece em:</p>
             <div className="numbers flex justify-around">
               {characterData.comics && (
                 <NumberView
@@ -107,6 +113,29 @@ export default function CharacterPage({ characterData }: CharacterProps) {
               )}
             </div>
           </div>
+          <section className="flex justify-between max-h-72 overflow-scroll pt-4 border border-white rounded-xl py-3">
+            <div className="comics">
+              {characterData.comics?.items.map((comic) => (
+                <p className="hover:text-red-700" key={comic.name}>
+                  {comic.name}
+                </p>
+              ))}
+            </div>
+            <div className="series">
+              {characterData.series?.items.map((comic) => (
+                <p className="hover:text-red-700" key={comic.name}>
+                  {comic.name}
+                </p>
+              ))}
+            </div>
+            <div className="histories">
+              {characterData.stories?.items.map((comic) => (
+                <p className="hover:text-red-700" key={comic.name}>
+                  {comic.name}
+                </p>
+              ))}
+            </div>
+          </section>
         </section>
       </main>
     </Layout>

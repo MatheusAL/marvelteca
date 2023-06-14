@@ -46,12 +46,13 @@ export default function Characters({
   const firstLoad = useRef<boolean>(true);
 
   useEffect(() => {
+    console.log("chamou");
     const fetchData = async () => {
       setLoading(true);
       const offset = (currentPage - 1) * 50;
       const res = await marvelService.get(
         "/characters",
-        `?orderBy=name&offset=${offset}&limit=50&`
+        `?orderBy=name&offset=${offset}&limit=${displayLimit}&`
       );
       const data = await res;
       setCharacterData(data.data.results);
@@ -65,7 +66,7 @@ export default function Characters({
       fetchData();
     }
     firstLoad.current = false;
-  }, [currentPage]);
+  }, [currentPage, displayLimit]);
 
   useEffect(() => {
     const searchCharacters = async () => {
@@ -77,7 +78,7 @@ export default function Characters({
       }
       const res = await marvelService.get(
         "/characters",
-        `?${search}orderBy=name&limit=50&`
+        `?${search}orderBy=name&limit=${displayLimit}&`
       );
       const data = await res;
       setCharacterData(data.data.results);
@@ -98,7 +99,12 @@ export default function Characters({
         className={`flex min-h-screen flex-col items-center justify-between p-24`}
       >
         <h1 className="text-[42px] text-white font-bold">Marvel Characters</h1>
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          limit={displayLimit}
+          setSearchLimit={setDisplayLimit}
+        />
         {loading ? (
           <Image
             alt="loading"

@@ -15,7 +15,7 @@ const Number = ({ num }: NumberAnimatedProps) => {
     config: { mass: 1, tension: 20, friction: 10 },
   });
   return (
-    <animated.div className="flex justify-center text-[60px]">
+    <animated.div className="flex justify-center text-[16px] md:text-[60px]">
       {value.to((n) => n.toFixed(0))}
     </animated.div>
   );
@@ -23,9 +23,8 @@ const Number = ({ num }: NumberAnimatedProps) => {
 export default function NumberView({ number, label }: NumberViewProps) {
   return (
     <div className="flex flex-col hover:text-red-700">
-      {/* <b className="flex justify-center text-[36px]">{number}</b> */}
       <Number num={number} />
-      <b className="text-[36px]">{label}</b>
+      <b className="md:text-[36px] text-[16px]">{label}</b>
     </div>
   );
 }
