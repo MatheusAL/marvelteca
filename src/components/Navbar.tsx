@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Navbar() {
+  const router = useRouter();
+  const path = router.asPath;
   return (
     <nav className="bg-black border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -9,24 +12,26 @@ export default function Navbar() {
             MARVELTECA
           </span>
         </Link>
-        <span className="flex self-center text-2xl font-semibold whitespace-nowrap text-red-800 hover:text-white">
-          <Link href="/characters">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-10 h-10"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-              />
-            </svg>
-          </Link>
-        </span>
+        {path.length > 2 && (
+          <span className="flex self-center text-2xl font-semibold whitespace-nowrap text-red-800 hover:text-white">
+            <Link href="/characters">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-10 h-10"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                />
+              </svg>
+            </Link>
+          </span>
+        )}
       </div>
     </nav>
   );
