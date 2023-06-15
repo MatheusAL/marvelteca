@@ -99,7 +99,7 @@ export default function Characters({
           <div className="grid lg:grid-cols-6 gap-6 pt-3 sm:grid-cols-4 pb-10 min-h-max">
             {charactersDataList.length === 0 ? (
               <p className="grid grid-flow-col font-bold lg:col-span-6 sm:col-span-4 text-lg">
-                Nenhum personagem encotrado. Ou será que estamos em uma
+                Nenhum personagem encontrado. Ou será que estamos em uma
                 realidade paralela? &#128368;
               </p>
             ) : (

@@ -65,21 +65,21 @@ export default function CharacterPage({ characterData }: CharacterProps) {
             </div>
           </div>
           <section className="flex justify-around max-h-72 overflow-scroll pt-4 border border-white rounded-xl py-3">
-            <div className="comics px-2 overflow-clip">
+            <div className="comics px-2">
               {characterData.comics?.items.map((comic) => (
                 <p className="hover:text-red-700" key={comic.name}>
                   {comic.name}
                 </p>
               ))}
             </div>
-            <div className="series px-2 overflow-clip">
+            <div className="series px-2">
               {characterData.series?.items.map((comic) => (
                 <p className="hover:text-red-700" key={comic.name}>
                   {comic.name}
                 </p>
               ))}
             </div>
-            <div className="histories px-2 overflow-clip">
+            <div className="histories px-2">
               {characterData.stories?.items.map((comic) => (
                 <p className="hover:text-red-700" key={comic.name}>
                   {comic.name}
