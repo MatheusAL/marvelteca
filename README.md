@@ -3,6 +3,8 @@
 
 Uma plataforma para explorar informações sobre os personagens da Marvel através da utilização da API pública da Marvel.
 
+Link para visualização: [marvelteca.vercel.app](marvelteca.vercel.app)
+
 ### Tecnologias utilizadas
 - [React](https://react.dev/)
 - [Next.js](https://nextjs.org/)
