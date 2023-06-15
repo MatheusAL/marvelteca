@@ -1,28 +1,11 @@
 import { useEffect, useState, useRef } from "react";
-import { Suspense } from "react";
 import Image from "next/image";
 import CharacterCard from "@/components/CharacterCard";
 import SearchBar from "@/components/SearchBar";
 import Layout from "@/components/Layout";
 import Pagination from "@/components/Pagination";
 import marvelService from "@/services/marvelAPI";
-
-interface Thumbnail {
-  path: string;
-  extension: string;
-}
-interface Character {
-  id: number;
-  name: string;
-  description: string;
-  modified: string;
-  thumbnail: Thumbnail;
-  resourceURI: string;
-  comics?: object;
-  series?: object;
-  stories?: object;
-  events?: object;
-}
+import type { Character } from "@/interfaces/types";
 interface CharactersProps {
   charactersData: Array<Character>;
   totalCharactersReceived: number;
@@ -63,18 +46,9 @@ export default function Characters({
 
     const fetchData = async () => {
       setLoading(true);
-      // const offset = (currentPage - 1) * 50;
 
-      /* if (searchQuery.length >= 3) {
-        search = `nameStartsWith=${searchQuery}&`;
-      }
-      */
       const search = getFilters();
-      const res = await marvelService.get(
-        "/characters",
-        search
-        /* `?orderBy=name&offset=${offset}&limit=${requestLimit}&` */
-      );
+      const res = await marvelService.get("/characters", search);
       const data = await res;
       if (data.code === 200) {
         setCharacterData(data.data.results);
@@ -96,42 +70,21 @@ export default function Characters({
     firstLoad.current = false;
   }, [currentPage, requestLimit, orderField, searchQuery]);
 
-  /* useEffect(() => {
-
-    const searchCharacters = async () => {
-      let search = "";
-      setLoading(true);
-      if (searchQuery.length >= 3) {
-        search = `nameStartsWith=${searchQuery}&`;
-      }
-      const res = await marvelService.get(
-        "/characters",
-        `?${search}orderBy=name&limit=${requestLimit}&`
-      );
-      const data = await res;
-      setCharacterData(data.data.results);
-      const limit =
-        data.data.limit >= data.data.total ? data.data.total : data.data.limit;
-      setDisplayLimit(limit);
-      setTotalCharacters(data.data.total);
-      setLoading(false);
-    };
-    if (searchQuery.length >= 3 || searchQuery.length === 0) {
-      searchCharacters();
-    }
-  }, [searchQuery, requestLimit]); */
-
   return (
     <Layout>
       <main
         className={`flex min-h-screen flex-col items-center justify-between p-24`}
       >
-        <h1 className="text-[42px] text-white font-bold">Marvel Characters</h1>
+        <h1 className="text-[42px] text-white font-bold">
+          Personagens da Marvel
+        </h1>
         <SearchBar
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           requestLimit={requestLimit}
           setRequestLimit={setRequestLimit}
+          orderField={orderField}
+          setOrderField={setOrderField}
         />
 
         {loading ? (
@@ -144,12 +97,15 @@ export default function Characters({
           />
         ) : (
           <div className="grid lg:grid-cols-6 gap-6 pt-3 sm:grid-cols-4 pb-10 min-h-max">
-            {!loading && (
-              <>
-                {charactersDataList.map((result) => (
-                  <CharacterCard key={result.id} characterData={result} />
-                ))}
-              </>
+            {charactersDataList.length === 0 ? (
+              <p className="grid grid-flow-col font-bold lg:col-span-6 sm:col-span-4 text-lg">
+                Nenhum personagem encotrado. Ou será que estamos em uma
+                realidade paralela? &#128368;
+              </p>
+            ) : (
+              charactersDataList.map((result) => (
+                <CharacterCard key={result.id} characterData={result} />
+              ))
             )}
           </div>
         )}

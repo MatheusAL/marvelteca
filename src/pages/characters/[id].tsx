@@ -4,61 +4,14 @@ import { useRouter } from "next/router";
 import Layout from "@/components/Layout";
 import marvelService from "@/services/marvelAPI";
 import NumberView from "@/components/NumberView";
-import Link from "next/link";
-interface Thumbnail {
-  path: string;
-  extension: string;
-}
-
-interface Comic {
-  resourceURI: string;
-  name: string;
-}
-interface Comics {
-  available: number;
-  collectionURI: string;
-  items: Array<Comic>;
-}
-interface Serie {
-  resourceURI: string;
-  name: string;
-}
-interface Series {
-  available: number;
-  collectionURI: string;
-  items: Array<Serie>;
-}
-
-interface Story {
-  resourceURI: string;
-  name: string;
-}
-interface Stories {
-  available: number;
-  collectionURI: string;
-  items: Array<Story>;
-}
-
-interface Character {
-  id: number;
-  name: string;
-  description: string;
-  modified: string;
-  thumbnail: Thumbnail;
-  resourceURI: string;
-  comics?: Comics;
-  series?: Series;
-  stories?: Stories;
-  events?: object;
-}
+import type { Character } from "@/interfaces/types";
 interface CharacterProps {
   characterData: Character;
 }
 export default function CharacterPage({ characterData }: CharacterProps) {
   const thumbnailPath: string =
     characterData.thumbnail.path + "." + characterData.thumbnail.extension;
-  const router = useRouter();
-  const characterId = router.query.id;
+
   return (
     <Layout>
       <main className="flex min-h-screen lg:flex-row flex-col lg:p-24 p-8">
@@ -72,7 +25,7 @@ export default function CharacterPage({ characterData }: CharacterProps) {
             height="300"
           />
         </div>
-        <section className="flex flex-col px-8 py-3 text-white bg-black rounded-lg mx-8 drop-shadow-2xl max-h-min">
+        <section className="flex flex-col px-8 py-3 text-white bg-black rounded-lg mx-8 drop-shadow-2xl max-h-min grow">
           <p className="text-bold md:text-[36px] text-[24px] py-3">
             Informações do herói:{" "}
           </p>
@@ -104,31 +57,29 @@ export default function CharacterPage({ characterData }: CharacterProps) {
                 />
               )}
               {characterData.stories && (
-                <Link href={`/characters/comics/${characterId}/`}>
-                  <NumberView
-                    number={characterData.stories.available}
-                    label={"Histórias"}
-                  />
-                </Link>
+                <NumberView
+                  number={characterData.stories.available}
+                  label={"Histórias"}
+                />
               )}
             </div>
           </div>
           <section className="flex justify-around max-h-72 overflow-scroll pt-4 border border-white rounded-xl py-3">
-            <div className="comics">
+            <div className="comics px-2 overflow-clip">
               {characterData.comics?.items.map((comic) => (
                 <p className="hover:text-red-700" key={comic.name}>
                   {comic.name}
                 </p>
               ))}
             </div>
-            <div className="series">
+            <div className="series px-2 overflow-clip">
               {characterData.series?.items.map((comic) => (
                 <p className="hover:text-red-700" key={comic.name}>
                   {comic.name}
                 </p>
               ))}
             </div>
-            <div className="histories">
+            <div className="histories px-2 overflow-clip">
               {characterData.stories?.items.map((comic) => (
                 <p className="hover:text-red-700" key={comic.name}>
                   {comic.name}

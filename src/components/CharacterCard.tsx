@@ -1,22 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-
-interface Thumbnail {
-  path: string;
-  extension: string;
-}
-interface Character {
-  id: number;
-  name: string;
-  description: string;
-  modified: string;
-  thumbnail: Thumbnail;
-  resourceURI: string;
-  comics?: object;
-  series?: object;
-  stories?: object;
-  events?: object;
-}
+import type { Character } from "@/interfaces/types";
 interface CharacterProps {
   characterData: Character;
 }

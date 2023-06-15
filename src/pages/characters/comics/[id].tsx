@@ -1,81 +1,19 @@
-import Image from "next/image";
 import { GetServerSidePropsContext } from "next";
 import Layout from "@/components/Layout";
 import marvelService from "@/services/marvelAPI";
-import NumberView from "@/components/NumberView";
+import type { ComicFull, Character } from "@/interfaces/types";
 
-interface Thumbnail {
-  path: string;
-  extension: string;
-}
-
-interface Comic {
-  resourceURI: string;
-  name: string;
-}
-interface Comics {
-  available: number;
-  collectionURI: number;
-  items: Array<Comic>;
-}
-interface Serie {
-  resourceURI: string;
-  name: string;
-}
-interface Series {
-  available: number;
-  collectionURI: number;
-  items: Array<Serie>;
-}
-
-interface Storie {
-  resourceURI: string;
-  name: string;
-}
-interface Stories {
-  available: number;
-  collectionURI: number;
-  items: Array<Storie>;
-}
-
-interface Character {
-  id: number;
-  name: string;
-  description: string;
-  modified: string;
-  thumbnail: Thumbnail;
-  resourceURI: string;
-  comics?: Comics;
-  series?: Series;
-  stories?: Stories;
-  events?: object;
-}
-
-interface Comic {
-  id: number;
-  name: string;
-  description: string;
-  modified: string;
-  thumbnail: Thumbnail;
-  resourceURI: string;
-  comics?: Comics;
-  series?: Series;
-  stories?: Stories;
-  events?: object;
-}
-interface CharacterProps {
+interface CharacterComicsProps {
   characterData: Character;
-  comicsData: Array<Comic>;
+  comicsData: Array<ComicFull>;
 }
 export default function CharacterComicsPage({
   comicsData,
   characterData,
-}: CharacterProps) {
-  const thumbnailPath: string =
-    characterData.thumbnail.path + "." + characterData.thumbnail.extension;
+}: CharacterComicsProps) {
   return (
     <Layout>
-      <main className={`flex min-h-screen flex-row p-24`}>aaaaaaaa</main>
+      <main className={`flex min-h-screen flex-row p-24`}> Soon....</main>
     </Layout>
   );
 }

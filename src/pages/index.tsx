@@ -14,7 +14,7 @@ export default function Home() {
       </span>
       <button
         onClick={() => router.push("/characters")}
-        className="border border-white bg-black rounded shadow py-2 px-4"
+        className="border border-white bg-black rounded shadow py-2 px-4 hover:bg-white hover:text-black"
       >
         Entre nessa aventura!
       </button>

@@ -15,7 +15,7 @@ const marvelService = {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error("API GET request failed: ", error);
+      console.error("Erro na requisição: ", error);
       throw error;
     }
   },

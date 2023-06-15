@@ -1,8 +1,10 @@
 interface SearchBarProps {
   searchQuery: string;
   requestLimit: number;
+  orderField: string;
   setSearchQuery: (search: string) => void;
   setRequestLimit: (limit: number) => void;
+  setOrderField: (field: string) => void;
 }
 
 export default function SearchBar({
@@ -10,6 +12,8 @@ export default function SearchBar({
   requestLimit,
   setSearchQuery,
   setRequestLimit,
+  orderField,
+  setOrderField,
 }: SearchBarProps) {
   return (
     <div className="flex rounded w-full py-3 drop-shadow-2xl">
@@ -30,12 +34,14 @@ export default function SearchBar({
       <div className="px-4">
         <select
           id="order"
+          value={orderField}
+          onChange={(e) => {
+            setOrderField(e.target.value);
+          }}
           className="block px-4 py-4 text-red-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
         >
-          <option selected>Ordenação</option>
-          <option value="50">Nome</option>
-          <option value="25">Data de Modificação</option>
-          <option value="10">prei</option>
+          <option value="name">Nome</option>
+          <option value="modified">Data de Modificação</option>
         </select>
       </div>
       <input
